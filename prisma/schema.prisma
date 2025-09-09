@@ -1,0 +1,58 @@
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        String    @id @default(uuid())
+  nome      String
+  email     String    @unique
+  senha     String
+  reservas  Reserva[] // Relacionamento 1:N com Reserva
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Filme {
+  id        String    @id @default(uuid())
+  titulo    String
+  descricao String
+  duracao   Int // minutos
+  sessoes   Sessao[]  // Relacionamento 1:N com Sessão
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Sessao {
+  id                 String    @id @default(uuid())
+  filmeId            String
+  filme              Filme     @relation(fields: [filmeId], references: [id], onDelete: Cascade)
+  data               DateTime
+  horario            String
+  sala               Int
+  assentosTotais     Int
+  assentosDisponiveis Int
+  reservas           Reserva[] // Relacionamento 1:N com Reserva
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Reserva {
+  id                 String   @id @default(uuid())
+  usuarioId          String
+  sessaoId           String
+  usuario            Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  sessao             Sessao   @relation(fields: [sessaoId], references: [id], onDelete: Cascade)
+  quantidadeIngressos Int
+  assentos           String[] // Array de assentos, ex: ["A1", "A2"]
+  dataReserva        DateTime @default(now())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([sessaoId, assentos])
+}
