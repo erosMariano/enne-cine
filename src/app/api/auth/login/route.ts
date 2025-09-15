@@ -8,20 +8,20 @@ export async function POST(request: Request) {
   const { email, senha } = await request.json();
 
   if (!email || !senha) {
-    return NextResponse.json({ message: "Incomplete data" }, { status: 400 });
+    return NextResponse.json({ message: "Dados incompletos" }, { status: 400 });
   }
   const user = await prisma.usuario.findUnique({
     where: { email },
   });
 
   if (!user) {
-    return NextResponse.json({ message: "User not found" }, { status: 404 });
+    return NextResponse.json({ message: "Usuário não encontrado" }, { status: 404 });
   }
 
   const isPassword = await bcrypt.compare(senha, user.senha);
 
   if (!isPassword) {
-    return NextResponse.json({ message: "password incorrect" }, { status: 401 });
+    return NextResponse.json({ message: "Senha incorreta" }, { status: 401 });
   }
 
   const secretKey = createSecretKey(process.env.JWT_SECRET!, "utf-8");
