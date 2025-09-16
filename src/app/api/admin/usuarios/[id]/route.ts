@@ -3,13 +3,34 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { params } = context;
-  const idUser = params.id;
-  return NextResponse.json({
-    message: `Obter detalhes do usuário com ID: ${idUser}`,
-  });
+  const { id } = await context.params;
+
+  if (!id)
+    return NextResponse.json(
+      { message: "ID do usuário é obrigatório" },
+      { status: 400 }
+    );
+  try {
+    const user = await prisma.usuario.findUnique({
+      where: { id },
+      include: { reservas: true },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { message: "Usuário não encontrado" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(user, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Erro ao buscar usuário" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PUT(
