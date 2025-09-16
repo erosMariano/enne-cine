@@ -17,7 +17,6 @@ export async function middleware(request: NextRequest) {
     const token = request.headers.get("Authorization")?.split(" ")[1];
     const user = await verifyToken(token!);
 
-    console.log("User:", user);
     if (!user || user.role !== "admin") {
       return NextResponse.json({ message: "Sem permissão" }, { status: 403 });
     }
