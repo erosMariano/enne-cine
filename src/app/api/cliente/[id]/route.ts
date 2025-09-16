@@ -7,13 +7,6 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  const token = request.headers.get("Authorization")?.replace("Bearer ", "");
-  const userValidade = token ? await verifyToken(token) : null;
-
-
-  if (!userValidade || userValidade.id !== id) {
-    return NextResponse.json({ message: "Sem autorização" }, { status: 401 });
-  }
 
   const user = await prisma.usuario.findUnique({
     where: { id },

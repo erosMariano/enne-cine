@@ -12,18 +12,32 @@ async function verifyToken(token: string) {
   }
 }
 
-export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith("/api/admin")) {
-    const token = request.headers.get("Authorization")?.split(" ")[1];
-    const user = await verifyToken(token!);
+function unauthorized(text: string = "Sem autorização") {
+  return NextResponse.json({ message: text }, { status: 401 });
+}
 
-    if (!user || user.role !== "admin") {
-      return NextResponse.json({ message: "Sem permissão" }, { status: 403 });
-    }
+export async function middleware(request: NextRequest) {
+  const token = request.headers.get("Authorization")?.split(" ")[1];
+  if (!token) return unauthorized();
+
+  const user = await verifyToken(token);
+
+  const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith("/api/admin")) {
+    if (!user) return unauthorized("Token inválido ou ausente");
+    if (user.role !== "admin") return unauthorized("Apenas administradores");
   }
+
+  if (pathname.startsWith("/api/cliente")) {
+    if (!user) return unauthorized("Token inválido ou ausente");
+    const id = pathname.split("/")[3];
+    if (!id || user.id !== id) return unauthorized("Cliente inválido");
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/api/admin/:path*"],
+  matcher: ["/api/admin/:path*", "/api/cliente/:path*"],
 };
