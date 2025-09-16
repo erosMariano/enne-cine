@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -15,6 +16,10 @@ export async function PUT(
   request: Request,
   context: { params: { id: string } }
 ) {
+  const validateUser = await requireAdmin(request);
+
+  if (validateUser.status !== 200) return validateUser;
+
   const { params } = context;
   const idUser = params.id;
   return NextResponse.json({
