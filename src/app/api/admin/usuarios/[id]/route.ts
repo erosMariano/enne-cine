@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -29,12 +30,37 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { params } = context;
-  const idUser = params.id;
+  const { id } = await context.params;
 
-  return NextResponse.json({
-    message: `Deletar o usuário com ID: ${idUser}`,
-  });
+  if (!id) {
+    return NextResponse.json(
+      { message: "ID do usuário é obrigatório" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const deleteUser = await prisma.usuario.delete({
+      where: { id },
+    });
+
+    if (!deleteUser) {
+      return NextResponse.json(
+        { message: "Usuário não encontrado" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Usuário deletado com sucesso" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Erro ao deletar usuário" },
+      { status: 500 }
+    );
+  }
 }
