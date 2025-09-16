@@ -1,6 +1,6 @@
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
@@ -14,18 +14,44 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const validateUser = await requireAdmin(request);
+  const data = await request.json();
+  const { id } = await context.params;
 
-  if (validateUser.status !== 200) return validateUser;
+  if (!id) {
+    return NextResponse.json(
+      { message: "ID do usuário é obrigatório" },
+      { status: 400 }
+    );
+  }
 
-  const { params } = context;
-  const idUser = params.id;
-  return NextResponse.json({
-    message: `Atualizar o usuário com ID: ${idUser}`,
-  });
+  try {
+    const updateUser = await prisma.usuario.update({
+      where: { id },
+      data: {
+        ...data,
+      },
+    });
+
+    if (!updateUser) {
+      return NextResponse.json(
+        { message: "Usuário não encontrado" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Usuário atualizado com sucesso", user: updateUser },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Erro ao atualizar usuário" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE(
