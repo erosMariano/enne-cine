@@ -15,12 +15,17 @@ interface Filme {
   id: string;
   titulo: string;
   descricao: string;
-  duracao: number;
+  duracaoMin: number;
   sessoes: Sessao[];
   createdAt: Date;
   updatedAt: Date;
+  usuarioId: string;
+  postersUrl: string[];
 }
-
+type CreateFilmeDTO = Omit<
+  Filme,
+  "id" | "sessoes" | "createdAt" | "updatedAt"
+>;
 interface Sessao {
   id: string;
   filmeId: string;
