@@ -30,7 +30,7 @@ interface Sessao {
   id: string;
   filmeId: string;
   filme: Filme;
-  data: Date;
+  data: string;
   horario: string;
   sala: number;
   assentosTotais: number;
@@ -39,7 +39,7 @@ interface Sessao {
   createdAt: Date;
   updatedAt: Date;
 }
-
+type CreateSessaoDTO = Omit<Sessao, "id" | "filme" | "reservas" | "createdAt" | "updatedAt" | "assentosDisponiveis">;
 interface Reserva {
   id: string;
   usuarioId: string;
