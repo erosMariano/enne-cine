@@ -32,6 +32,7 @@ model Filme {
   sessoes   Sessao[]  // Relacionamento 1:N com Sessão
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  postersUrl String[]
 }
 
 model Sessao {
