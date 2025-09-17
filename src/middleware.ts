@@ -34,8 +34,18 @@ export async function middleware(request: NextRequest) {
     const id = pathname.split("/")[3];
     if (!id || user.id !== id) return unauthorized("Cliente inválido");
   }
+  const requestHeaders = new Headers(request.headers);
 
-  return NextResponse.next();
+  requestHeaders.set(
+    "enne-user",
+    JSON.stringify({ id: user?.id, role: user?.role })
+  );
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {
