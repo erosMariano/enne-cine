@@ -22,10 +22,8 @@ interface Filme {
   usuarioId: string;
   postersUrl: string[];
 }
-type CreateFilmeDTO = Omit<
-  Filme,
-  "id" | "sessoes" | "createdAt" | "updatedAt"
->;
+type CreateFilmeDTO = Omit<Filme, "id" | "sessoes" | "createdAt" | "updatedAt">;
+type DeleteFilmeDTO = Pick<Filme, "id">;
 interface Sessao {
   id: string;
   filmeId: string;
