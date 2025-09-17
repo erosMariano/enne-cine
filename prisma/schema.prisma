@@ -28,7 +28,7 @@ model Filme {
   usuario   Usuario   @relation(fields: [usuarioId], references: [id])
   titulo    String
   descricao String
-  duracao   Int // minutos
+  duracaoMin   Int // minutos
   sessoes   Sessao[]  // Relacionamento 1:N com Sessão
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
