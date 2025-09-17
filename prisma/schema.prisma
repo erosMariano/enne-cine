@@ -14,6 +14,7 @@ model Usuario {
   email     String    @unique
   senha     String
   reservas  Reserva[] // Relacionamento 1:N com Reserva
+  filmes    Filme[]   // Relacionamento 1:N com Filme
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   role      String    @default("cliente") // "cliente", "admin", "funcionario"
@@ -23,6 +24,8 @@ model Usuario {
 
 model Filme {
   id        String    @id @default(uuid())
+  usuarioId String
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id])
   titulo    String
   descricao String
   duracao   Int // minutos
