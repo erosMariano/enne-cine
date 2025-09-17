@@ -24,6 +24,8 @@ interface Filme {
 }
 type CreateFilmeDTO = Omit<Filme, "id" | "sessoes" | "createdAt" | "updatedAt">;
 type DeleteFilmeDTO = Pick<Filme, "id">;
+type UpdateFilmeDTO = Omit<Filme, "sessoes" | "createdAt" | "updatedAt" | "usuarioId">;
+
 interface Sessao {
   id: string;
   filmeId: string;
