@@ -52,3 +52,10 @@ interface Reserva {
   createdAt: Date;
   updatedAt: Date;
 }
+
+//interface de front
+export type FormData = {
+  nome: string;
+  email: string;
+  senha: string;
+}
