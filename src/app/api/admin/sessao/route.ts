@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   const sessoes = await prisma.sessao.findMany({
@@ -10,7 +10,7 @@ export async function GET() {
 
   return NextResponse.json(sessoes);
 }
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const { filmeId, data, horario, sala, assentosTotais }: CreateSessaoDTO =
     await request.json();
 

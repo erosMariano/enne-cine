@@ -26,6 +26,7 @@ export async function GET(
     }
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "Erro ao buscar usuário" },
       { status: 500 }
@@ -67,6 +68,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "Erro ao atualizar usuário" },
       { status: 500 }
@@ -104,6 +106,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "Erro ao deletar usuário" },
       { status: 500 }

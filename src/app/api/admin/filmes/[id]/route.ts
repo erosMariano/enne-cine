@@ -31,6 +31,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Erro ao remover filme" },
       { status: 500 }
@@ -81,6 +82,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Erro ao atualizar filme" },
       { status: 500 }

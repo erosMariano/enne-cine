@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET() {
   const filmes = await prisma.filme.findMany();
   return NextResponse.json(filmes);
 }
 
-export async function POST(request: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
     const { descricao, duracaoMin, titulo, postersUrl }: CreateFilmeDTO =
       await request.json();

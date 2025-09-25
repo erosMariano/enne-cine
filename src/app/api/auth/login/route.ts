@@ -2,9 +2,9 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { createSecretKey } from "crypto";
 import * as jose from "jose";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const { email, senha } = await request.json();
 
   if (!email || !senha) {
