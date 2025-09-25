@@ -34,6 +34,13 @@ export async function POST(request: NextResponse) {
       descricao,
       duracaoMin,
       postersUrl: postersUrl || [],
+      classificacao: "",
+      genero: "",
+      idioma: "",
+      lancamento: new Date(),
+      emCartaz: true,
+      sessaoExtra: false,
+      trailerUrl: "",
     };
 
     const filme = await prisma.filme.create({
