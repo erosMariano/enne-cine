@@ -35,7 +35,7 @@ type CreateFilmeDTO = Omit<
   "id" | "usuario" | "sessoes" | "createdAt" | "updatedAt"
 >;
 type DeleteFilmeDTO = Pick<Filme, "id">;
-type UpdateFilmeDTO = Partial<
+type UpdateFilmeDTO = Pick<
   Omit<
     Filme,
     "id" | "usuario" | "sessoes" | "createdAt" | "updatedAt" | "usuarioId"
