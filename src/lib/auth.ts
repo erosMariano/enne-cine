@@ -1,5 +1,5 @@
 import * as jose from "jose";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function verifyToken(
   token: string
@@ -15,11 +15,12 @@ export async function verifyToken(
 
     return payload;
   } catch (err) {
+    console.error("Erro ao verificar token:", err);
     return null;
   }
 }
 
-export async function requireAdmin(request: Request) {
+export async function requireAdmin(request: NextRequest) {
   const token = request.headers.get("Authorization")?.split(" ")[1] || "";
 
   const user = await verifyToken(token);

@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: DeleteFilmeDTO }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     if (!id) {
       return NextResponse.json(
@@ -31,6 +31,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Erro ao remover filme" },
       { status: 500 }
@@ -39,19 +40,23 @@ export async function DELETE(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: UpdateFilmeDTO }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params; 
     const { titulo, descricao, duracaoMin, postersUrl }: UpdateFilmeDTO =
       await request.json();
 
     const userHeaders = request.headers.get("enne-user");
     const user = userHeaders && JSON.parse(userHeaders);
 
-    if (!userHeaders || !user)
-      return NextResponse.json({ message: "Sem autorização" }, { status: 401 });
+    if (!userHeaders || !user) {
+      return NextResponse.json(
+        { message: "Sem autorização" },
+        { status: 401 }
+      );
+    }
 
     if (!id) {
       return NextResponse.json(
@@ -77,6 +82,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Erro ao atualizar filme" },
       { status: 500 }

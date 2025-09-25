@@ -23,16 +23,23 @@ model Usuario {
 }
 
 model Filme {
-  id        String    @id @default(uuid())
-  usuarioId String
-  usuario   Usuario   @relation(fields: [usuarioId], references: [id])
-  titulo    String
-  descricao String
-  duracaoMin   Int // minutos
-  sessoes   Sessao[]  // Relacionamento 1:N com Sessão
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  postersUrl String[]
+  id          String    @id @default(uuid())
+  usuarioId   String
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  titulo      String
+  descricao   String
+  duracaoMin  Int
+  genero      String
+  classificacao String
+  idioma      String
+  lancamento  DateTime
+  emCartaz    Boolean  @default(true)
+  postersUrl  String[]
+  trailerUrl  String?
+  sessaoExtra Boolean   @default(false)
+  sessoes     Sessao[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Sessao {

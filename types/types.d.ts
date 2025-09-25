@@ -13,18 +13,34 @@ interface Usuario {
 
 interface Filme {
   id: string;
+  usuarioId: string;
+  usuario: Usuario;
   titulo: string;
   descricao: string;
   duracaoMin: number;
+  genero: string;
+  classificacao: string;
+  idioma: string;
+  lancamento: Date;
+  emCartaz: boolean;
+  postersUrl: string[];
+  trailerUrl?: string;
+  sessaoExtra: boolean;
   sessoes: Sessao[];
   createdAt: Date;
   updatedAt: Date;
-  usuarioId: string;
-  postersUrl: string[];
 }
-type CreateFilmeDTO = Omit<Filme, "id" | "sessoes" | "createdAt" | "updatedAt">;
+type CreateFilmeDTO = Omit<
+  Filme,
+  "id" | "usuario" | "sessoes" | "createdAt" | "updatedAt"
+>;
 type DeleteFilmeDTO = Pick<Filme, "id">;
-type UpdateFilmeDTO = Omit<Filme, "sessoes" | "createdAt" | "updatedAt" | "usuarioId">;
+type UpdateFilmeDTO = Pick<
+  Omit<
+    Filme,
+    "id" | "usuario" | "sessoes" | "createdAt" | "updatedAt" | "usuarioId"
+  >
+>;
 
 interface Sessao {
   id: string;
@@ -39,7 +55,15 @@ interface Sessao {
   createdAt: Date;
   updatedAt: Date;
 }
-type CreateSessaoDTO = Omit<Sessao, "id" | "filme" | "reservas" | "createdAt" | "updatedAt" | "assentosDisponiveis">;
+type CreateSessaoDTO = Omit<
+  Sessao,
+  | "id"
+  | "filme"
+  | "reservas"
+  | "createdAt"
+  | "updatedAt"
+  | "assentosDisponiveis"
+>;
 interface Reserva {
   id: string;
   usuarioId: string;
